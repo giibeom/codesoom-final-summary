@@ -1,12 +1,12 @@
 package com.codesoom.assignment.application;
 
-import com.codesoom.assignment.product.adapter.in.web.dto.request.ProductData;
+import com.codesoom.assignment.product.adapter.in.web.dto.request.ProductCreateRequestDto;
+import com.codesoom.assignment.product.adapter.in.web.dto.request.ProductUpdateRequestDto;
 import com.codesoom.assignment.product.application.ProductService;
+import com.codesoom.assignment.product.application.port.command.ProductMapper;
 import com.codesoom.assignment.product.domain.Product;
 import com.codesoom.assignment.product.domain.ProductRepository;
 import com.codesoom.assignment.product.exception.ProductNotFoundException;
-import com.github.dozermapper.core.DozerBeanMapperBuilder;
-import com.github.dozermapper.core.Mapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -28,9 +28,9 @@ class ProductServiceTest {
 
     @BeforeEach
     void setUp() {
-        Mapper mapper = DozerBeanMapperBuilder.buildDefault();
+        ProductMapper productMapper = ProductMapper.INSTANCE;
 
-        productService = new ProductService(mapper, productRepository);
+        productService = new ProductService(productRepository, productMapper);
 
         Product product = Product.builder()
                 .id(1L)
@@ -88,13 +88,13 @@ class ProductServiceTest {
 
     @Test
     void createProduct() {
-        ProductData productData = ProductData.builder()
+        ProductCreateRequestDto productCreateRequestDto = ProductCreateRequestDto.builder()
                 .name("쥐돌이")
                 .maker("냥이월드")
                 .price(5000)
                 .build();
 
-        Product product = productService.createProduct(productData);
+        Product product = productService.createProduct(productCreateRequestDto);
 
         verify(productRepository).save(any(Product.class));
 
@@ -105,13 +105,13 @@ class ProductServiceTest {
 
     @Test
     void updateProductWithExistedId() {
-        ProductData productData = ProductData.builder()
+        ProductUpdateRequestDto productUpdateRequestDto = ProductUpdateRequestDto.builder()
                 .name("쥐순이")
                 .maker("냥이월드")
                 .price(5000)
                 .build();
 
-        Product product = productService.updateProduct(1L, productData);
+        Product product = productService.updateProduct(1L, productUpdateRequestDto);
 
         assertThat(product.getId()).isEqualTo(1L);
         assertThat(product.getName()).isEqualTo("쥐순이");
@@ -119,13 +119,13 @@ class ProductServiceTest {
 
     @Test
     void updateProductWithNotExistedId() {
-        ProductData productData = ProductData.builder()
+        ProductUpdateRequestDto productUpdateRequestDto = ProductUpdateRequestDto.builder()
                 .name("쥐순이")
                 .maker("냥이월드")
                 .price(5000)
                 .build();
 
-        assertThatThrownBy(() -> productService.updateProduct(1000L, productData))
+        assertThatThrownBy(() -> productService.updateProduct(1000L, productUpdateRequestDto))
                 .isInstanceOf(ProductNotFoundException.class);
     }
 
