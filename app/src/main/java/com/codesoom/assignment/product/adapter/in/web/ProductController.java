@@ -2,8 +2,10 @@ package com.codesoom.assignment.product.adapter.in.web;
 
 import com.codesoom.assignment.product.adapter.in.web.dto.request.ProductCreateRequestDto;
 import com.codesoom.assignment.product.adapter.in.web.dto.request.ProductUpdateRequestDto;
+import com.codesoom.assignment.product.adapter.in.web.dto.response.CreateProductResponseDto;
+import com.codesoom.assignment.product.adapter.in.web.dto.response.ProductResponseDto;
+import com.codesoom.assignment.product.adapter.in.web.dto.response.UpdateProductResponseDto;
 import com.codesoom.assignment.product.application.port.ProductUseCase;
-import com.codesoom.assignment.product.domain.Product;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -34,8 +36,10 @@ public class ProductController {
      * @return 상품 목록 리턴
      */
     @GetMapping
-    public List<Product> list() {
-        return productUseCase.getProducts();
+    public List<ProductResponseDto> list() {
+        return ProductResponseDto.fromList(
+                productUseCase.getProducts()
+        );
     }
 
     /**
@@ -45,8 +49,10 @@ public class ProductController {
      * @return 상품 상세 정보 리턴
      */
     @GetMapping("{id}")
-    public Product detail(@PathVariable final Long id) {
-        return productUseCase.getProduct(id);
+    public ProductResponseDto detail(@PathVariable final Long id) {
+        return ProductResponseDto.from(
+                productUseCase.getProduct(id)
+        );
     }
 
     /**
@@ -58,22 +64,26 @@ public class ProductController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("isAuthenticated() and hasAuthority('USER')")
-    public Product create(@RequestBody @Valid final ProductCreateRequestDto productCreateRequestDto) {
-        return productUseCase.createProduct(productCreateRequestDto);
+    public CreateProductResponseDto create(@RequestBody @Valid final ProductCreateRequestDto productCreateRequestDto) {
+        return new CreateProductResponseDto(
+                productUseCase.createProduct(productCreateRequestDto)
+        );
     }
 
     /**
      * 상품을 수정하고 리턴합니다.
      *
-     * @param id                   상품 고유 id
+     * @param id                      상품 고유 id
      * @param productUpdateRequestDto 수정할 상품 정보
      * @return 수정한 상품 상세 정보 리턴
      */
     @PatchMapping("{id}")
     @PreAuthorize("isAuthenticated()")
-    public Product update(@PathVariable final Long id,
-                          @RequestBody @Valid final ProductUpdateRequestDto productUpdateRequestDto) {
-        return productUseCase.updateProduct(id, productUpdateRequestDto);
+    public UpdateProductResponseDto update(@PathVariable final Long id,
+                                           @RequestBody @Valid final ProductUpdateRequestDto productUpdateRequestDto) {
+        return new UpdateProductResponseDto(
+                productUseCase.updateProduct(id, productUpdateRequestDto)
+        );
     }
 
     /**
