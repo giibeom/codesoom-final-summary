@@ -51,6 +51,6 @@ public class ProductService implements ProductUseCase {
 
     private Product findProduct(final Long id) {
         return productRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException(id));
+                .orElseThrow(ProductNotFoundException::new);
     }
 }

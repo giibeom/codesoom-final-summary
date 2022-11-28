@@ -122,7 +122,7 @@ class ProductControllerTest {
             @BeforeEach
             void setUp() {
                 given(productService.getProduct(ID_MAX.value()))
-                        .willThrow(new ProductNotFoundException(ID_MAX.value()));
+                        .willThrow(new ProductNotFoundException());
             }
 
             @Test
@@ -367,7 +367,7 @@ class ProductControllerTest {
                 @BeforeEach
                 void setUp() {
                     given(productService.updateProduct(eq(찾을_수_없는_id), any(ProductUpdateRequest.class)))
-                            .willThrow(new ProductNotFoundException(ID_MAX.value()));
+                            .willThrow(new ProductNotFoundException());
                 }
 
                 @Test
@@ -545,7 +545,7 @@ class ProductControllerTest {
                 @BeforeEach
                 void setUp() {
                     given(productService.deleteProduct(찾을_수_없는_id))
-                            .willThrow(new ProductNotFoundException(찾을_수_없는_id));
+                            .willThrow(new ProductNotFoundException());
                 }
 
                 @Test
