@@ -35,7 +35,7 @@ public class ProductService {
                                  final ProductUpdateRequest productUpdateRequest) {
         Product product = findProduct(id);
 
-        product.changeWith(productUpdateRequest.toEntity());
+        product.update(productUpdateRequest.toEntity());
 
         return product;
     }

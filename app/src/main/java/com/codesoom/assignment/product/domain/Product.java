@@ -1,6 +1,6 @@
 package com.codesoom.assignment.product.domain;
 
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -12,9 +12,7 @@ import javax.persistence.Id;
 
 @Entity
 @Getter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode
 public class Product {
     @Id
@@ -29,9 +27,43 @@ public class Product {
 
     private String imageUrl;
 
-    public void changeWith(Product source) {
-        this.name = source.name;
-        this.maker = source.maker;
-        this.price = source.price;
+    @Builder
+    public Product(Long id, String name, String maker, Integer price, String imageUrl) {
+        this.id = id;
+        this.name = name;
+        this.maker = maker;
+        this.price = price;
+        this.imageUrl = imageUrl;
+    }
+
+    public final void update(Product updateProduct) {
+        updateName(updateProduct.getName());
+        updateMaker(updateProduct.getMaker());
+        updatePrice(updateProduct.getPrice());
+        updateImageUrl(updateProduct.getImageUrl());
+    }
+
+    private void updateName(String name) {
+        if (name != null) {
+            this.name = name;
+        }
+    }
+
+    private void updateMaker(String maker) {
+        if (maker != null) {
+            this.maker = maker;
+        }
+    }
+
+    private void updatePrice(Integer price) {
+        if (price != null) {
+            this.price = price;
+        }
+    }
+
+    private void updateImageUrl(String imageUrl) {
+        if (imageUrl != null) {
+            this.imageUrl = imageUrl;
+        }
     }
 }
