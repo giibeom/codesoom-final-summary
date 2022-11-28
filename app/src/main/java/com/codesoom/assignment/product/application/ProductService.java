@@ -1,7 +1,6 @@
 package com.codesoom.assignment.product.application;
 
 import com.codesoom.assignment.product.application.port.command.ProductCreateRequest;
-import com.codesoom.assignment.product.application.port.command.ProductMapper;
 import com.codesoom.assignment.product.application.port.command.ProductUpdateRequest;
 import com.codesoom.assignment.product.domain.Product;
 import com.codesoom.assignment.product.domain.ProductRepository;
@@ -15,11 +14,9 @@ import java.util.List;
 @Transactional
 public class ProductService {
     private final ProductRepository productRepository;
-    private final ProductMapper productMapper;
 
-    public ProductService(final ProductRepository productRepository, final ProductMapper productMapper) {
+    public ProductService(final ProductRepository productRepository) {
         this.productRepository = productRepository;
-        this.productMapper = productMapper;
     }
 
     public List<Product> getProducts() {
@@ -31,15 +28,14 @@ public class ProductService {
     }
 
     public Product createProduct(final ProductCreateRequest productCreateRequest) {
-        Product product = productMapper.toEntity(productCreateRequest);
-        return productRepository.save(product);
+        return productRepository.save(productCreateRequest.toEntity());
     }
 
     public Product updateProduct(final Long id,
                                  final ProductUpdateRequest productUpdateRequest) {
         Product product = findProduct(id);
 
-        product.changeWith(productMapper.toEntity(productUpdateRequest));
+        product.changeWith(productUpdateRequest.toEntity());
 
         return product;
     }
