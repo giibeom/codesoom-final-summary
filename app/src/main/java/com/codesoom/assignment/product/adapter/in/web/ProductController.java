@@ -28,16 +28,33 @@ public class ProductController {
         this.productUseCase = productUseCase;
     }
 
+    /**
+     * 상품의 목록을 리턴합니다.
+     *
+     * @return 상품 목록 리턴
+     */
     @GetMapping
     public List<Product> list() {
         return productUseCase.getProducts();
     }
 
+    /**
+     * 상품의 상세 정보를 리턴합니다.
+     *
+     * @param id 상품 고유 id
+     * @return 상품 상세 정보 리턴
+     */
     @GetMapping("{id}")
     public Product detail(@PathVariable final Long id) {
         return productUseCase.getProduct(id);
     }
 
+    /**
+     * 상품을 등록하고 리턴합니다.
+     *
+     * @param productCreateRequestDto 등록할 상품 정보
+     * @return 등록한 상품 상세 정보 리턴
+     */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("isAuthenticated() and hasAuthority('USER')")
@@ -45,6 +62,13 @@ public class ProductController {
         return productUseCase.createProduct(productCreateRequestDto);
     }
 
+    /**
+     * 상품을 수정하고 리턴합니다.
+     *
+     * @param id                   상품 고유 id
+     * @param productUpdateRequestDto 수정할 상품 정보
+     * @return 수정한 상품 상세 정보 리턴
+     */
     @PatchMapping("{id}")
     @PreAuthorize("isAuthenticated()")
     public Product update(@PathVariable final Long id,
@@ -52,6 +76,11 @@ public class ProductController {
         return productUseCase.updateProduct(id, productUpdateRequestDto);
     }
 
+    /**
+     * 상품을 삭제합니다.
+     *
+     * @param id 상품 고유 id
+     */
     @DeleteMapping("{id}")
     @PreAuthorize("isAuthenticated()")
     public void destroy(@PathVariable final Long id) {

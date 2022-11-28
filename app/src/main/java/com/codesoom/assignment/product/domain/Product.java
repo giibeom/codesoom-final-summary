@@ -36,6 +36,12 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
+    /**
+     * 상품 정보를 수정합니다. <br>
+     * 필드가 null일 경우 수정하지 않습니다.
+     *
+     * @param updateProduct 수정할 상품 정보
+     */
     public final void update(Product updateProduct) {
         updateName(updateProduct.getName());
         updateMaker(updateProduct.getMaker());
