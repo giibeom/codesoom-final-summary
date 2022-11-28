@@ -2,7 +2,7 @@ package com.codesoom.assignment.product.adapter.in.web;
 
 import com.codesoom.assignment.product.adapter.in.web.dto.request.ProductCreateRequestDto;
 import com.codesoom.assignment.product.adapter.in.web.dto.request.ProductUpdateRequestDto;
-import com.codesoom.assignment.product.application.ProductService;
+import com.codesoom.assignment.product.application.port.ProductUseCase;
 import com.codesoom.assignment.product.domain.Product;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,39 +22,39 @@ import java.util.List;
 @RestController
 @RequestMapping("/products")
 public class ProductController {
-    private final ProductService productService;
+    private final ProductUseCase productUseCase;
 
-    public ProductController(final ProductService productService) {
-        this.productService = productService;
+    public ProductController(ProductUseCase productUseCase) {
+        this.productUseCase = productUseCase;
     }
 
     @GetMapping
     public List<Product> list() {
-        return productService.getProducts();
+        return productUseCase.getProducts();
     }
 
     @GetMapping("{id}")
     public Product detail(@PathVariable final Long id) {
-        return productService.getProduct(id);
+        return productUseCase.getProduct(id);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("isAuthenticated() and hasAuthority('USER')")
     public Product create(@RequestBody @Valid final ProductCreateRequestDto productCreateRequestDto) {
-        return productService.createProduct(productCreateRequestDto);
+        return productUseCase.createProduct(productCreateRequestDto);
     }
 
     @PatchMapping("{id}")
     @PreAuthorize("isAuthenticated()")
     public Product update(@PathVariable final Long id,
                           @RequestBody @Valid final ProductUpdateRequestDto productUpdateRequestDto) {
-        return productService.updateProduct(id, productUpdateRequestDto);
+        return productUseCase.updateProduct(id, productUpdateRequestDto);
     }
 
     @DeleteMapping("{id}")
     @PreAuthorize("isAuthenticated()")
     public void destroy(@PathVariable final Long id) {
-        productService.deleteProduct(id);
+        productUseCase.deleteProduct(id);
     }
 }

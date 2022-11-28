@@ -1,5 +1,6 @@
 package com.codesoom.assignment.product.application;
 
+import com.codesoom.assignment.product.application.port.ProductUseCase;
 import com.codesoom.assignment.product.application.port.command.ProductCreateRequest;
 import com.codesoom.assignment.product.application.port.command.ProductUpdateRequest;
 import com.codesoom.assignment.product.domain.Product;
@@ -12,7 +13,7 @@ import java.util.List;
 
 @Service
 @Transactional
-public class ProductService {
+public class ProductService implements ProductUseCase {
     private final ProductRepository productRepository;
 
     public ProductService(final ProductRepository productRepository) {
