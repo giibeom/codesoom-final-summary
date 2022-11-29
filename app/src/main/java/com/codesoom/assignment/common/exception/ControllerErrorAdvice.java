@@ -15,10 +15,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
-import java.nio.file.AccessDeniedException;
 import java.util.Set;
 
 @RestControllerAdvice
@@ -47,10 +45,31 @@ public class ControllerErrorAdvice extends ResponseEntityExceptionHandler {
         return new ErrorResponse("Invalid access token");
     }
 
-    @ResponseStatus(HttpStatus.FORBIDDEN)
-    @ExceptionHandler(AccessDeniedException.class)
+    // 현재는 Security가 알아서 isAuthenticated() 실패 시 401, hasAnyAuthority() 실패 시 403으로 반환한다
+    // 예외 응답 body 메시지를 컨트롤 하려면 핸들러에서 잡아줘야함
+    // 그럴려면 내가 직접 AccessDeniedException 에서 isAuthenticated 실패인지 hasAnyAuthority 실패인지 판별해줘야 함
+    // TODO: isAuthenticated()가 실패하면 401, hasAnyAuthority()가 실패하면 403으로 던지는 방법 서칭 필요
+/*    @ExceptionHandler(AccessDeniedException.class)
     public ErrorResponse handleAccessDeniedException() {
         return new ErrorResponse("Access denied");
+    }
+
+    // TODO: AccessDeniedException 핸들링 완료 시 주석 해제 예정
+    @ExceptionHandler(value = {Exception.class})
+    protected ResponseEntity<ErrorResponse> handleException(final HttpServletRequest request,
+                                                            final Exception exception) {
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(ErrorResponse.from(request, exception));
+    }*/
+
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(
+            MethodArgumentNotValidException exception,
+            HttpHeaders headers, HttpStatus status, WebRequest request) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(ErrorResponse.from(exception));
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -60,7 +79,6 @@ public class ControllerErrorAdvice extends ResponseEntityExceptionHandler {
         return new ErrorResponse(messageTemplate);
     }
 
-
     private String getViolatedMessage(ConstraintViolationException exception) {
         String messageTemplate = null;
         Set<ConstraintViolation<?>> violations = exception.getConstraintViolations();
@@ -68,22 +86,5 @@ public class ControllerErrorAdvice extends ResponseEntityExceptionHandler {
             messageTemplate = violation.getMessageTemplate();
         }
         return messageTemplate;
-    }
-
-    @ExceptionHandler(value = {Exception.class})
-    protected ResponseEntity<ErrorResponse> handleException(final HttpServletRequest request,
-                                                            final Exception exception) {
-        return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(ErrorResponse.from(request, exception));
-    }
-
-    @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(
-            MethodArgumentNotValidException exception,
-            HttpHeaders headers, HttpStatus status, WebRequest request) {
-        return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(ErrorResponse.from(exception));
     }
 }
