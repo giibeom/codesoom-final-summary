@@ -9,7 +9,6 @@ import com.codesoom.assignment.user.domain.User;
 import com.codesoom.assignment.user.domain.UserRepository;
 import com.codesoom.assignment.user.exception.UserEmailDuplicationException;
 import com.codesoom.assignment.user.exception.UserNotFoundException;
-import com.github.dozermapper.core.Mapper;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,16 +18,13 @@ import javax.transaction.Transactional;
 @Service
 @Transactional
 public class UserService implements UserUseCase {
-    private final Mapper mapper;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UserService(Mapper dozerMapper,
-                       UserRepository userRepository,
+    public UserService(UserRepository userRepository,
                        RoleRepository roleRepository,
                        PasswordEncoder passwordEncoder) {
-        this.mapper = dozerMapper;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
@@ -40,8 +36,7 @@ public class UserService implements UserUseCase {
             throw new UserEmailDuplicationException(email);
         }
 
-        User user = userRepository.save(
-                mapper.map(userCreateRequest, User.class));
+        User user = userRepository.save(userCreateRequest.toEntity());
 
         user.changePassword(userCreateRequest.getPassword(), passwordEncoder);
 
@@ -53,13 +48,14 @@ public class UserService implements UserUseCase {
     public User updateUser(Long id,
                            UserUpdateRequest userUpdateRequest,
                            Long userId) throws AccessDeniedException {
+        // TODO: 인가 로직 AOP로 분리
         if (!id.equals(userId)) {
             throw new AccessDeniedException("Access denied");
         }
 
         User user = findUser(id);
 
-        User source = mapper.map(userUpdateRequest, User.class);
+        User source = userUpdateRequest.toEntity();
         user.changeWith(source);
 
         return user;

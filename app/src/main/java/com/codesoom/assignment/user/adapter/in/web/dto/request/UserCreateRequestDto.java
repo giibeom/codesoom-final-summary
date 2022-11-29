@@ -1,6 +1,8 @@
 package com.codesoom.assignment.user.adapter.in.web.dto.request;
 
 import com.codesoom.assignment.user.application.port.command.UserCreateRequest;
+import com.codesoom.assignment.user.application.port.command.UserMapper;
+import com.codesoom.assignment.user.domain.User;
 import com.github.dozermapper.core.Mapping;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,4 +28,9 @@ public class UserCreateRequestDto implements UserCreateRequest {
     @Size(min = 4, max = 1024, message = "비밀번호는 4자 이상 1024자 이하로 입력해야 합니다")
     @Mapping("password")
     private String password;
+
+    @Override
+    public User toEntity() {
+        return UserMapper.INSTANCE.toEntity(this);
+    }
 }
