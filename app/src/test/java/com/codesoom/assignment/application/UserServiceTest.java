@@ -80,7 +80,7 @@ class UserServiceTest {
                 .password("test")
                 .build();
 
-        User user = userService.registerUser(registrationData);
+        User user = userService.createUser(registrationData);
 
         assertThat(user.getId()).isEqualTo(13L);
         assertThat(user.getEmail()).isEqualTo("tester@example.com");
@@ -98,7 +98,7 @@ class UserServiceTest {
                 .password("test")
                 .build();
 
-        assertThatThrownBy(() -> userService.registerUser(registrationData))
+        assertThatThrownBy(() -> userService.createUser(registrationData))
                 .isInstanceOf(UserEmailDuplicationException.class);
 
         verify(userRepository).existsByEmail(EXISTED_EMAIL_ADDRESS);

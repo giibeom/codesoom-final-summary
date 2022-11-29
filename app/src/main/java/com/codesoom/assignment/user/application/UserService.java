@@ -2,6 +2,7 @@ package com.codesoom.assignment.user.application;
 
 import com.codesoom.assignment.role.domain.Role;
 import com.codesoom.assignment.role.domain.RoleRepository;
+import com.codesoom.assignment.user.application.port.UserUseCase;
 import com.codesoom.assignment.user.application.port.command.UserCreateRequest;
 import com.codesoom.assignment.user.application.port.command.UserUpdateRequest;
 import com.codesoom.assignment.user.domain.User;
@@ -17,7 +18,7 @@ import javax.transaction.Transactional;
 
 @Service
 @Transactional
-public class UserService {
+public class UserService implements UserUseCase {
     private final Mapper mapper;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
@@ -33,7 +34,7 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public User registerUser(UserCreateRequest userCreateRequest) {
+    public User createUser(UserCreateRequest userCreateRequest) {
         String email = userCreateRequest.getEmail();
         if (userRepository.existsByEmail(email)) {
             throw new UserEmailDuplicationException(email);
@@ -49,7 +50,8 @@ public class UserService {
         return user;
     }
 
-    public User updateUser(Long id, UserUpdateRequest userUpdateRequest,
+    public User updateUser(Long id,
+                           UserUpdateRequest userUpdateRequest,
                            Long userId) throws AccessDeniedException {
         if (!id.equals(userId)) {
             throw new AccessDeniedException("Access denied");

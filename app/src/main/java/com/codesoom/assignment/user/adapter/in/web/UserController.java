@@ -5,7 +5,7 @@ import com.codesoom.assignment.user.adapter.in.web.dto.request.UserCreateRequest
 import com.codesoom.assignment.user.adapter.in.web.dto.request.UserUpdateRequestDto;
 import com.codesoom.assignment.user.adapter.in.web.dto.response.CreateUserResponseDto;
 import com.codesoom.assignment.user.adapter.in.web.dto.response.UpdateUserResponseDto;
-import com.codesoom.assignment.user.application.UserService;
+import com.codesoom.assignment.user.application.port.UserUseCase;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,17 +23,17 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/users")
 public class UserController {
-    private final UserService userService;
+    private final UserUseCase userUseCase;
 
-    public UserController(UserService userService) {
-        this.userService = userService;
+    public UserController(UserUseCase userUseCase) {
+        this.userUseCase = userUseCase;
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     CreateUserResponseDto create(@RequestBody @Valid UserCreateRequestDto registrationData) {
         return new CreateUserResponseDto(
-                userService.registerUser(registrationData)
+                userUseCase.createUser(registrationData)
         );
     }
 
@@ -45,13 +45,13 @@ public class UserController {
             UserAuthentication authentication
     ) throws AccessDeniedException {
         return new UpdateUserResponseDto(
-                userService.updateUser(id, modificationData, authentication.getUserId())
+                userUseCase.updateUser(id, modificationData, authentication.getUserId())
         );
     }
 
     @DeleteMapping("{id}")
     @PreAuthorize("isAuthenticated() and hasAuthority('ADMIN')")
     void destroy(@PathVariable Long id) {
-        userService.deleteUser(id);
+        userUseCase.deleteUser(id);
     }
 }
