@@ -1,8 +1,8 @@
 package com.codesoom.assignment.user.adapter.in.web;
 
 import com.codesoom.assignment.common.security.UserAuthentication;
-import com.codesoom.assignment.user.adapter.in.web.dto.request.UserModificationData;
-import com.codesoom.assignment.user.adapter.in.web.dto.request.UserRegistrationData;
+import com.codesoom.assignment.user.adapter.in.web.dto.request.UserCreateRequestDto;
+import com.codesoom.assignment.user.adapter.in.web.dto.request.UserUpdateRequestDto;
 import com.codesoom.assignment.user.adapter.in.web.dto.response.UserResultData;
 import com.codesoom.assignment.user.application.UserService;
 import com.codesoom.assignment.user.domain.User;
@@ -31,7 +31,7 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    UserResultData create(@RequestBody @Valid UserRegistrationData registrationData) {
+    UserResultData create(@RequestBody @Valid UserCreateRequestDto registrationData) {
         User user = userService.registerUser(registrationData);
         return getUserResultData(user);
     }
@@ -40,7 +40,7 @@ public class UserController {
     @PreAuthorize("isAuthenticated() and hasAuthority('USER')")
     UserResultData update(
             @PathVariable Long id,
-            @RequestBody @Valid UserModificationData modificationData,
+            @RequestBody @Valid UserUpdateRequestDto modificationData,
             UserAuthentication authentication
     ) throws AccessDeniedException {
         Long userId = authentication.getUserId();

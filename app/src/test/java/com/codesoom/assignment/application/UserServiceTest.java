@@ -2,8 +2,8 @@ package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.role.domain.Role;
 import com.codesoom.assignment.role.domain.RoleRepository;
-import com.codesoom.assignment.user.adapter.in.web.dto.request.UserModificationData;
-import com.codesoom.assignment.user.adapter.in.web.dto.request.UserRegistrationData;
+import com.codesoom.assignment.user.adapter.in.web.dto.request.UserCreateRequestDto;
+import com.codesoom.assignment.user.adapter.in.web.dto.request.UserUpdateRequestDto;
 import com.codesoom.assignment.user.application.UserService;
 import com.codesoom.assignment.user.domain.User;
 import com.codesoom.assignment.user.domain.UserRepository;
@@ -74,7 +74,7 @@ class UserServiceTest {
 
     @Test
     void registerUser() {
-        UserRegistrationData registrationData = UserRegistrationData.builder()
+        UserCreateRequestDto registrationData = UserCreateRequestDto.builder()
                 .email("tester@example.com")
                 .name("Tester")
                 .password("test")
@@ -92,7 +92,7 @@ class UserServiceTest {
 
     @Test
     void registerUserWithDuplicatedEmail() {
-        UserRegistrationData registrationData = UserRegistrationData.builder()
+        UserCreateRequestDto registrationData = UserCreateRequestDto.builder()
                 .email(EXISTED_EMAIL_ADDRESS)
                 .name("Tester")
                 .password("test")
@@ -106,7 +106,7 @@ class UserServiceTest {
 
     @Test
     void updateUserWithExistedId() throws AccessDeniedException {
-        UserModificationData modificationData = UserModificationData.builder()
+        UserUpdateRequestDto modificationData = UserUpdateRequestDto.builder()
                 .name("TEST")
                 .password("TEST")
                 .build();
@@ -123,7 +123,7 @@ class UserServiceTest {
 
     @Test
     void updateUserWithNotExistedId() {
-        UserModificationData modificationData = UserModificationData.builder()
+        UserUpdateRequestDto modificationData = UserUpdateRequestDto.builder()
                 .name("TEST")
                 .password("TEST")
                 .build();
@@ -140,7 +140,7 @@ class UserServiceTest {
 
     @Test
     void updateUserWithDeletedId() {
-        UserModificationData modificationData = UserModificationData.builder()
+        UserUpdateRequestDto modificationData = UserUpdateRequestDto.builder()
                 .name("TEST")
                 .password("TEST")
                 .build();
@@ -156,7 +156,7 @@ class UserServiceTest {
 
     @Test
     void updateUserByOthersAccess() {
-        UserModificationData modificationData = UserModificationData.builder()
+        UserUpdateRequestDto modificationData = UserUpdateRequestDto.builder()
                 .name("TEST")
                 .password("TEST")
                 .build();

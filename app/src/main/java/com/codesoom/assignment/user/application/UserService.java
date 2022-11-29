@@ -2,8 +2,8 @@ package com.codesoom.assignment.user.application;
 
 import com.codesoom.assignment.role.domain.Role;
 import com.codesoom.assignment.role.domain.RoleRepository;
-import com.codesoom.assignment.user.adapter.in.web.dto.request.UserModificationData;
-import com.codesoom.assignment.user.adapter.in.web.dto.request.UserRegistrationData;
+import com.codesoom.assignment.user.application.port.command.UserCreateRequest;
+import com.codesoom.assignment.user.application.port.command.UserUpdateRequest;
 import com.codesoom.assignment.user.domain.User;
 import com.codesoom.assignment.user.domain.UserRepository;
 import com.codesoom.assignment.user.exception.UserEmailDuplicationException;
@@ -33,23 +33,23 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public User registerUser(UserRegistrationData registrationData) {
-        String email = registrationData.getEmail();
+    public User registerUser(UserCreateRequest userCreateRequest) {
+        String email = userCreateRequest.getEmail();
         if (userRepository.existsByEmail(email)) {
             throw new UserEmailDuplicationException(email);
         }
 
         User user = userRepository.save(
-                mapper.map(registrationData, User.class));
+                mapper.map(userCreateRequest, User.class));
 
-        user.changePassword(registrationData.getPassword(), passwordEncoder);
+        user.changePassword(userCreateRequest.getPassword(), passwordEncoder);
 
         roleRepository.save(new Role(user.getId(), "USER"));
 
         return user;
     }
 
-    public User updateUser(Long id, UserModificationData modificationData,
+    public User updateUser(Long id, UserUpdateRequest userUpdateRequest,
                            Long userId) throws AccessDeniedException {
         if (!id.equals(userId)) {
             throw new AccessDeniedException("Access denied");
@@ -57,7 +57,7 @@ public class UserService {
 
         User user = findUser(id);
 
-        User source = mapper.map(modificationData, User.class);
+        User source = mapper.map(userUpdateRequest, User.class);
         user.changeWith(source);
 
         return user;
