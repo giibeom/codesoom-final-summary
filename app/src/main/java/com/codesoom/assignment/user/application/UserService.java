@@ -22,16 +22,17 @@ public class UserService implements UserUseCase {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository,
-                       RoleRepository roleRepository,
-                       PasswordEncoder passwordEncoder) {
+    public UserService(final UserRepository userRepository,
+                       final RoleRepository roleRepository,
+                       final PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
-    public User createUser(UserCreateRequest userCreateRequest) {
+    public User createUser(final UserCreateRequest userCreateRequest) {
         String email = userCreateRequest.getEmail();
+
         if (userRepository.existsByEmail(email)) {
             throw new UserEmailDuplicationException(email);
         }
@@ -45,9 +46,9 @@ public class UserService implements UserUseCase {
         return user;
     }
 
-    public User updateUser(Long id,
-                           UserUpdateRequest userUpdateRequest,
-                           Long userId) throws AccessDeniedException {
+    public User updateUser(final Long id,
+                           final UserUpdateRequest userUpdateRequest,
+                           final Long userId) throws AccessDeniedException {
         // TODO: 인가 로직 AOP로 분리
         if (!id.equals(userId)) {
             throw new AccessDeniedException("Access denied");
@@ -56,18 +57,18 @@ public class UserService implements UserUseCase {
         User user = findUser(id);
 
         User source = userUpdateRequest.toEntity();
-        user.changeWith(source);
+        user.update(source);
 
         return user;
     }
 
-    public User deleteUser(Long id) {
+    public User deleteUser(final Long id) {
         User user = findUser(id);
         user.destroy();
         return user;
     }
 
-    private User findUser(Long id) {
+    private User findUser(final Long id) {
         return userRepository.findByIdAndDeletedIsFalse(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
     }
