@@ -34,7 +34,7 @@ public class UserService implements UserUseCase {
         String email = userCreateRequest.getEmail();
 
         if (userRepository.existsByEmail(email)) {
-            throw new UserEmailDuplicationException(email);
+            throw new UserEmailDuplicationException();
         }
 
         User user = userRepository.save(userCreateRequest.toEntity());
@@ -70,6 +70,6 @@ public class UserService implements UserUseCase {
 
     private User findUser(final Long id) {
         return userRepository.findByIdAndDeletedIsFalse(id)
-                .orElseThrow(() -> new UserNotFoundException(id));
+                .orElseThrow(UserNotFoundException::new);
     }
 }

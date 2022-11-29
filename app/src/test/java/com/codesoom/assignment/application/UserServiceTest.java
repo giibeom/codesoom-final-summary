@@ -40,8 +40,7 @@ class UserServiceTest {
         userService = new UserService(userRepository, roleRepository, passwordEncoder);
 
         given(userRepository.existsByEmail(EXISTED_EMAIL_ADDRESS))
-                .willThrow(new UserEmailDuplicationException(
-                        EXISTED_EMAIL_ADDRESS));
+                .willThrow(new UserEmailDuplicationException());
 
         given(userRepository.save(any(User.class))).will(invocation -> {
             User source = invocation.getArgument(0);
