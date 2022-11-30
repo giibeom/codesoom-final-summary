@@ -23,7 +23,7 @@ class UserTest {
         user.update(User.builder()
                 .name("TEST")
                 .password("TEST")
-                .build());
+                .build(), passwordEncoder);
 
         assertThat(user.getName()).isEqualTo("TEST");
         assertThat(user.getPassword()).isEqualTo("");

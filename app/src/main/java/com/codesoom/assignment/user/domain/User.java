@@ -40,10 +40,12 @@ public class User {
      * 회원 정보를 수정합니다. <br>
      * 필드가 null일 경우 수정하지 않습니다.
      *
-     * @param updateUser 수정할 회원 정보
+     * @param updateUser      수정할 회원 정보
+     * @param passwordEncoder 비밀번호 인코더
      */
-    public void update(final User updateUser) {
+    public void update(final User updateUser, PasswordEncoder passwordEncoder) {
         updateName(updateUser.getName());
+        updatePassword(updateUser.getPassword(), passwordEncoder);
     }
 
     /**
@@ -81,6 +83,12 @@ public class User {
     private void updateName(final String name) {
         if (!name.isBlank()) {
             this.name = name;
+        }
+    }
+
+    private void updatePassword(String password, PasswordEncoder passwordEncoder) {
+        if (!password.isBlank()) {
+            changePassword(password, passwordEncoder);
         }
     }
 }
