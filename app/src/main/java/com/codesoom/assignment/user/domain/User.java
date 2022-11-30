@@ -43,7 +43,7 @@ public class User {
      * @param updateUser      수정할 회원 정보
      * @param passwordEncoder 비밀번호 인코더
      */
-    public void update(final User updateUser, PasswordEncoder passwordEncoder) {
+    public void update(final User updateUser, final PasswordEncoder passwordEncoder) {
         updateName(updateUser.getName());
         updatePassword(updateUser.getPassword(), passwordEncoder);
     }
@@ -65,7 +65,7 @@ public class User {
      * 실제 값을 삭제하지 않고 deleted 변수를 true로 변환합니다.
      */
     public void destroy() {
-        deleted = true;
+        this.deleted = true;
     }
 
     /**
@@ -77,7 +77,7 @@ public class User {
      */
     public boolean authenticate(final String password,
                                 final PasswordEncoder passwordEncoder) {
-        return !deleted && passwordEncoder.matches(password, this.password);
+        return !this.deleted && passwordEncoder.matches(password, this.password);
     }
 
     private void updateName(final String name) {
@@ -86,7 +86,7 @@ public class User {
         }
     }
 
-    private void updatePassword(String password, PasswordEncoder passwordEncoder) {
+    private void updatePassword(final String password, final PasswordEncoder passwordEncoder) {
         if (!password.isBlank()) {
             changePassword(password, passwordEncoder);
         }
