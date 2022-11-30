@@ -15,14 +15,14 @@ import javax.validation.constraints.Size;
 public class UserCreateRequestDto implements UserCreateRequest {
     @NotBlank(message = "이메일을 입력하세요")
     @Size(min = 3)
-    private String email;
+    private final String email;
 
     @NotBlank(message = "이름을 입력하세요")
-    private String name;
+    private final String name;
 
     @NotBlank(message = "비밀번호를 입력하세요")
     @Size(min = 4, max = 1024, message = "비밀번호는 4자 이상 1024자 이하로 입력해야 합니다")
-    private String password;
+    private final String password;
 
     @Builder
     public UserCreateRequestDto(final String email, final String name, final String password) {
