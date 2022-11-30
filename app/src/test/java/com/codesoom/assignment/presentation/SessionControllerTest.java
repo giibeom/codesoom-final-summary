@@ -3,7 +3,7 @@ package com.codesoom.assignment.presentation;
 import com.codesoom.assignment.MockMvcCharacterEncodingCustomizer;
 import com.codesoom.assignment.common.utils.JsonUtil;
 import com.codesoom.assignment.session.adapter.in.web.SessionController;
-import com.codesoom.assignment.session.application.AuthenticationService;
+import com.codesoom.assignment.session.application.port.AuthenticationUseCase;
 import com.codesoom.assignment.session.exception.LoginFailException;
 import com.codesoom.assignment.support.UserFixture;
 import org.junit.jupiter.api.BeforeEach;
@@ -46,7 +46,7 @@ class SessionControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private AuthenticationService authenticationService;
+    private AuthenticationUseCase authenticationUseCase;
 
     /**
      * Spring Boot 2.3 버전까지 mock이 각 테스트 종료 후 reset되지 않는 이슈 존재 <br>
@@ -56,7 +56,7 @@ class SessionControllerTest {
      */
     @BeforeEach
     void setUpClearMock() {
-        Mockito.clearInvocations(authenticationService);
+        Mockito.clearInvocations(authenticationUseCase);
     }
 
     @Nested
@@ -70,7 +70,7 @@ class SessionControllerTest {
 
             @BeforeEach
             void setUp() {
-                given(authenticationService.login(eq(찾을_수_없는_이메일), any(String.class)))
+                given(authenticationUseCase.login(eq(찾을_수_없는_이메일), any(String.class)))
                         .willThrow(new LoginFailException(찾을_수_없는_이메일));
             }
 
@@ -81,7 +81,7 @@ class SessionControllerTest {
 
                 perform.andExpect(status().isBadRequest());
 
-                verify(authenticationService).login(eq(찾을_수_없는_이메일), any(String.class));
+                verify(authenticationUseCase).login(eq(찾을_수_없는_이메일), any(String.class));
             }
         }
 
@@ -92,7 +92,7 @@ class SessionControllerTest {
 
             @BeforeEach
             void setUp() {
-                given(authenticationService.login(any(String.class), eq(틀린_비밀번호)))
+                given(authenticationUseCase.login(any(String.class), eq(틀린_비밀번호)))
                         .willThrow(new LoginFailException(""));
             }
 
@@ -103,7 +103,7 @@ class SessionControllerTest {
 
                 perform.andExpect(status().isBadRequest());
 
-                verify(authenticationService).login(any(String.class), eq(틀린_비밀번호));
+                verify(authenticationUseCase).login(any(String.class), eq(틀린_비밀번호));
             }
         }
 
@@ -122,7 +122,7 @@ class SessionControllerTest {
 
                     perform.andExpect(status().isBadRequest());
 
-                    verify(authenticationService, never()).login(any(String.class), any(String.class));
+                    verify(authenticationUseCase, never()).login(any(String.class), any(String.class));
                 }
             }
 
@@ -137,7 +137,7 @@ class SessionControllerTest {
 
                     perform.andExpect(status().isBadRequest());
 
-                    verify(authenticationService, never()).login(any(String.class), any(String.class));
+                    verify(authenticationUseCase, never()).login(any(String.class), any(String.class));
                 }
             }
         }
@@ -148,7 +148,7 @@ class SessionControllerTest {
 
             @BeforeEach
             void setUp() {
-                given(authenticationService.login(회원_1번.이메일(), 회원_1번.비밀번호()))
+                given(authenticationUseCase.login(회원_1번.이메일(), 회원_1번.비밀번호()))
                         .willReturn(유저_1번_정상_토큰.토큰_값());
             }
 
@@ -160,7 +160,7 @@ class SessionControllerTest {
                 perform.andExpect(status().isCreated());
                 perform.andExpect(content().string(containsString(유저_1번_정상_토큰.토큰_값())));
 
-                verify(authenticationService).login(회원_1번.이메일(), 회원_1번.비밀번호());
+                verify(authenticationUseCase).login(회원_1번.이메일(), 회원_1번.비밀번호());
             }
         }
     }

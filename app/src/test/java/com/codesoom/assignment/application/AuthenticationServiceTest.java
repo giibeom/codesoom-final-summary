@@ -4,6 +4,7 @@ import com.codesoom.assignment.common.utils.JwtUtil;
 import com.codesoom.assignment.role.domain.Role;
 import com.codesoom.assignment.role.domain.RoleRepository;
 import com.codesoom.assignment.session.application.AuthenticationService;
+import com.codesoom.assignment.session.application.port.AuthenticationUseCase;
 import com.codesoom.assignment.session.exception.InvalidTokenException;
 import com.codesoom.assignment.session.exception.LoginFailException;
 import com.codesoom.assignment.user.domain.User;
@@ -31,17 +32,17 @@ class AuthenticationServiceTest {
     private static final String INVALID_TOKEN = "eyJhbGciOiJIUzI1NiJ9." +
             "eyJ1c2VySWQiOjF9.ZZ3CUl0jxeLGvQ1Js5nG2Ty5qGTlqai5ubDMXZOdaD0";
 
-    private AuthenticationService authenticationService;
+    private AuthenticationUseCase authenticationUseCase;
 
-    private UserRepository userRepository = mock(UserRepository.class);
-    private RoleRepository roleRepository = mock(RoleRepository.class);
+    private final UserRepository userRepository = mock(UserRepository.class);
+    private final RoleRepository roleRepository = mock(RoleRepository.class);
+    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @BeforeEach
     void setUp() {
         JwtUtil jwtUtil = new JwtUtil(SECRET);
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-        authenticationService = new AuthenticationService(
+        authenticationUseCase = new AuthenticationService(
                 userRepository, roleRepository, jwtUtil, passwordEncoder);
 
         User user = User.builder().id(1L).build();
@@ -58,7 +59,7 @@ class AuthenticationServiceTest {
 
     @Test
     void loginWithRightEmailAndPassword() {
-        String accessToken = authenticationService.login(
+        String accessToken = authenticationUseCase.login(
                 "tester@example.com", "test");
 
         assertThat(accessToken).isEqualTo(VALID_TOKEN);
@@ -69,7 +70,7 @@ class AuthenticationServiceTest {
     @Test
     void loginWithWrongEmail() {
         assertThatThrownBy(
-                () -> authenticationService.login("badguy@example.com", "test")
+                () -> authenticationUseCase.login("badguy@example.com", "test")
         ).isInstanceOf(LoginFailException.class);
 
         verify(userRepository).findByEmail("badguy@example.com");
@@ -78,7 +79,7 @@ class AuthenticationServiceTest {
     @Test
     void loginWithWrongPassword() {
         assertThatThrownBy(
-                () -> authenticationService.login("tester@example.com", "xxx")
+                () -> authenticationUseCase.login("tester@example.com", "xxx")
         ).isInstanceOf(LoginFailException.class);
 
         verify(userRepository).findByEmail("tester@example.com");
@@ -86,7 +87,7 @@ class AuthenticationServiceTest {
 
     @Test
     void parseTokenWithValidToken() {
-        Long userId = authenticationService.parseToken(VALID_TOKEN);
+        Long userId = authenticationUseCase.parseToken(VALID_TOKEN);
 
         assertThat(userId).isEqualTo(1L);
     }
@@ -94,20 +95,20 @@ class AuthenticationServiceTest {
     @Test
     void parseTokenWithInvalidToken() {
         assertThatThrownBy(
-                () -> authenticationService.parseToken(INVALID_TOKEN)
+                () -> authenticationUseCase.parseToken(INVALID_TOKEN)
         ).isInstanceOf(InvalidTokenException.class);
     }
 
     @Test
     void roles() {
         assertThat(
-                authenticationService.roles(1L).stream()
+                authenticationUseCase.roles(1L).stream()
                         .map(Role::getName)
                         .collect(Collectors.toList())
         ).isEqualTo(Arrays.asList("USER"));
 
         assertThat(
-                authenticationService.roles(1004L).stream()
+                authenticationUseCase.roles(1004L).stream()
                         .map(Role::getName)
                         .collect(Collectors.toList())
         ).isEqualTo(Arrays.asList("USER", "ADMIN"));

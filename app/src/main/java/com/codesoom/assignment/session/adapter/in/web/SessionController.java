@@ -2,7 +2,7 @@ package com.codesoom.assignment.session.adapter.in.web;
 
 import com.codesoom.assignment.session.adapter.in.web.dto.request.SessionRequestDto;
 import com.codesoom.assignment.session.adapter.in.web.dto.response.SessionResponseDto;
-import com.codesoom.assignment.session.application.AuthenticationService;
+import com.codesoom.assignment.session.application.port.AuthenticationUseCase;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,10 +15,10 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/session")
 public class SessionController {
-    private final AuthenticationService authenticationService;
+    private final AuthenticationUseCase authenticationUseCase;
 
-    public SessionController(final AuthenticationService authenticationService) {
-        this.authenticationService = authenticationService;
+    public SessionController(final AuthenticationUseCase authenticationUseCase) {
+        this.authenticationUseCase = authenticationUseCase;
     }
 
     /**
@@ -34,7 +34,7 @@ public class SessionController {
         String password = sessionRequestDto.getPassword();
 
         return new SessionResponseDto(
-                authenticationService.login(email, password)
+                authenticationUseCase.login(email, password)
         );
     }
 }
