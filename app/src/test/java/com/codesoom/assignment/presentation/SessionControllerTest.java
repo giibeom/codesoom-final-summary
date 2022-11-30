@@ -71,7 +71,7 @@ class SessionControllerTest {
             @BeforeEach
             void setUp() {
                 given(authenticationUseCase.login(eq(찾을_수_없는_이메일), any(String.class)))
-                        .willThrow(new LoginFailException(찾을_수_없는_이메일));
+                        .willThrow(new LoginFailException());
             }
 
             @Test
@@ -93,7 +93,7 @@ class SessionControllerTest {
             @BeforeEach
             void setUp() {
                 given(authenticationUseCase.login(any(String.class), eq(틀린_비밀번호)))
-                        .willThrow(new LoginFailException(""));
+                        .willThrow(new LoginFailException());
             }
 
             @Test

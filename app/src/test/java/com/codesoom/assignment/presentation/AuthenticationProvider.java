@@ -22,7 +22,7 @@ public class AuthenticationProvider {
     @BeforeEach
     void setUpAuthToken() {
         given(authenticationUseCase.parseToken(eq(유저_1번_값_비정상_토큰.토큰_값())))
-                .willThrow(new InvalidTokenException(유저_1번_값_비정상_토큰.토큰_값()));
+                .willThrow(new InvalidTokenException());
 
         given(authenticationUseCase.parseToken(eq(유저_1번_정상_토큰.토큰_값())))
                 .willReturn(유저_1번_정상_토큰.아이디());

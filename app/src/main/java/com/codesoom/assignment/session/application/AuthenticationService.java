@@ -32,10 +32,10 @@ public class AuthenticationService implements AuthenticationUseCase {
 
     public String login(final String email, final String password) {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new LoginFailException(email));
+                .orElseThrow(LoginFailException::new);
 
         if (!user.authenticate(password, passwordEncoder)) {
-            throw new LoginFailException(email);
+            throw new LoginFailException();
         }
 
         return jwtUtil.encode(user.getId());
