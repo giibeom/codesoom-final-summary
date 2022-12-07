@@ -1,6 +1,7 @@
-package com.codesoom.assignment.product.exception;
+package com.codesoom.assignment.adapter.in.web.product;
 
 import com.codesoom.assignment.common.exception.dto.ErrorResponse;
+import com.codesoom.assignment.product.application.exception.ProductNotFoundException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
  */
 @RestControllerAdvice
 @Order(Ordered.HIGHEST_PRECEDENCE)
-public class ProductExceptionHandler {
+public final class ProductExceptionHandler {
 
     /**
      * 상품을 찾지 못했을 때 던지는 예외를 핸들링합니다.
@@ -23,7 +24,7 @@ public class ProductExceptionHandler {
      */
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(ProductNotFoundException.class)
-    public ErrorResponse handleProductNotFound(ProductNotFoundException exception) {
+    public static ErrorResponse handleProductNotFound(final ProductNotFoundException exception) {
         return ErrorResponse.from(exception);
     }
 }

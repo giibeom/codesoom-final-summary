@@ -1,18 +1,18 @@
-package com.codesoom.assignment.product.domain;
+package com.codesoom.assignment.product.application;
 
-import com.codesoom.assignment.product.domain.port.command.ProductCreateRequest;
-import com.codesoom.assignment.product.domain.port.command.ProductUpdateRequest;
-import com.codesoom.assignment.product.domain.port.in.ProductUseCase;
-import com.codesoom.assignment.product.exception.ProductNotFoundException;
-import com.codesoom.assignment.product.repository.Product;
-import com.codesoom.assignment.product.repository.ProductRepository;
+import com.codesoom.assignment.product.application.exception.ProductNotFoundException;
+import com.codesoom.assignment.product.application.port.command.ProductCreateRequest;
+import com.codesoom.assignment.product.application.port.command.ProductUpdateRequest;
+import com.codesoom.assignment.product.application.port.in.ProductUseCase;
+import com.codesoom.assignment.product.application.port.out.ProductRepository;
+import com.codesoom.assignment.product.domain.Product;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 public class ProductService implements ProductUseCase {
     private final ProductRepository productRepository;
 
@@ -28,10 +28,12 @@ public class ProductService implements ProductUseCase {
         return findProduct(id);
     }
 
+    @Transactional
     public Product createProduct(final ProductCreateRequest productCreateRequest) {
         return productRepository.save(productCreateRequest.toEntity());
     }
 
+    @Transactional
     public Product updateProduct(final Long id,
                                  final ProductUpdateRequest productUpdateRequest) {
         Product product = findProduct(id);
@@ -41,6 +43,7 @@ public class ProductService implements ProductUseCase {
         return product;
     }
 
+    @Transactional
     public Product deleteProduct(final Long id) {
         Product product = findProduct(id);
 

@@ -1,7 +1,9 @@
-package com.codesoom.assignment.product.domain.port.command;
+package com.codesoom.assignment.adapter.in.web.product.dto;
 
 import com.codesoom.assignment.adapter.in.web.product.dto.response.ProductResponseDto;
-import com.codesoom.assignment.product.repository.Product;
+import com.codesoom.assignment.product.application.port.command.ProductCreateRequest;
+import com.codesoom.assignment.product.application.port.command.ProductUpdateRequest;
+import com.codesoom.assignment.product.domain.Product;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -22,7 +24,7 @@ public interface ProductMapper {
      * @return 데이터가 매핑된 상품 엔티티
      */
     @Mapping(target = "id", ignore = true)
-    Product toEntity(ProductCreateRequest productCreateRequest);
+    Product toEntity(final ProductCreateRequest productCreateRequest);
 
     /**
      * 상품 수정 RequestDto에서 상품 엔티티로 객체를 매핑합니다.
@@ -31,7 +33,7 @@ public interface ProductMapper {
      * @return 데이터가 매핑된 상품 엔티티
      */
     @Mapping(target = "id", ignore = true)
-    Product toEntity(ProductUpdateRequest productUpdateRequest);
+    Product toEntity(final ProductUpdateRequest productUpdateRequest);
 
     /**
      * 상품 엔티티에서 상품 정보 ResponseDto로 객체를 매핑합니다.
@@ -39,7 +41,7 @@ public interface ProductMapper {
      * @param entity 상품 정보
      * @return 데이터가 매핑된 상품 정보 ResponseDto 리턴
      */
-    ProductResponseDto toResponse(Product entity);
+    ProductResponseDto toResponse(final Product entity);
 
     /**
      * 상품 엔티티 목록에서 상품 목록 ResponseDto로 객체를 매핑합니다.
@@ -47,5 +49,5 @@ public interface ProductMapper {
      * @param entity 상품 정보
      * @return 데이터가 매핑된 상품 목록 ResponseDto 리턴
      */
-    List<ProductResponseDto> toResponseList(List<Product> entity);
+    List<ProductResponseDto> toResponseList(final List<Product> entity);
 }

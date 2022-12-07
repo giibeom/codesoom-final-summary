@@ -1,8 +1,8 @@
-package com.codesoom.assignment.product.domain.port.in;
+package com.codesoom.assignment.product.application.port.in;
 
-import com.codesoom.assignment.product.domain.port.command.ProductCreateRequest;
-import com.codesoom.assignment.product.domain.port.command.ProductUpdateRequest;
-import com.codesoom.assignment.product.repository.Product;
+import com.codesoom.assignment.product.application.port.command.ProductCreateRequest;
+import com.codesoom.assignment.product.application.port.command.ProductUpdateRequest;
+import com.codesoom.assignment.product.domain.Product;
 
 import java.util.List;
 

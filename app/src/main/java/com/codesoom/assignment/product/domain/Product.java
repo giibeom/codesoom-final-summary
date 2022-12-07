@@ -1,4 +1,4 @@
-package com.codesoom.assignment.product.repository;
+package com.codesoom.assignment.product.domain;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -28,7 +28,8 @@ public class Product {
     private String imageUrl;
 
     @Builder
-    public Product(Long id, String name, String maker, Integer price, String imageUrl) {
+    public Product(final Long id, final String name,
+                   final String maker, final Integer price, final String imageUrl) {
         this.id = id;
         this.name = name;
         this.maker = maker;
@@ -42,32 +43,33 @@ public class Product {
      *
      * @param updateProduct 수정할 상품 정보
      */
-    public final void update(Product updateProduct) {
+    public final void update(final Product updateProduct) {
         updateName(updateProduct.getName());
         updateMaker(updateProduct.getMaker());
         updatePrice(updateProduct.getPrice());
         updateImageUrl(updateProduct.getImageUrl());
     }
 
-    private void updateName(String name) {
+
+    private void updateName(final String name) {
         if (name != null) {
             this.name = name;
         }
     }
 
-    private void updateMaker(String maker) {
+    private void updateMaker(final String maker) {
         if (maker != null) {
             this.maker = maker;
         }
     }
 
-    private void updatePrice(Integer price) {
+    private void updatePrice(final Integer price) {
         if (price != null) {
             this.price = price;
         }
     }
 
-    private void updateImageUrl(String imageUrl) {
+    private void updateImageUrl(final String imageUrl) {
         if (imageUrl != null) {
             this.imageUrl = imageUrl;
         }

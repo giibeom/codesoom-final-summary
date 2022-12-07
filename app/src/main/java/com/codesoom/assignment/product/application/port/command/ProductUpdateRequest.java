@@ -1,6 +1,6 @@
-package com.codesoom.assignment.product.domain.port.command;
+package com.codesoom.assignment.product.application.port.command;
 
-import com.codesoom.assignment.product.repository.Product;
+import com.codesoom.assignment.product.domain.Product;
 
 public interface ProductUpdateRequest {
     String getName();
