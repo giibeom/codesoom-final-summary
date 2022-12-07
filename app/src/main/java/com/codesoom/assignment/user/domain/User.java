@@ -1,4 +1,4 @@
-package com.codesoom.assignment.user.repository;
+package com.codesoom.assignment.user.domain;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -23,6 +23,7 @@ public class User {
     @GeneratedValue
     private Long id;
 
+    // TODO: 리팩토링 필요
     @Builder.Default
     private String email = "";
 

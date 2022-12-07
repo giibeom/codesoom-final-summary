@@ -1,4 +1,4 @@
-package com.codesoom.assignment.user.exception;
+package com.codesoom.assignment.user.application.exception;
 
 /**
  * 회원의 이메일이 중복될 때 던지는 예외입니다. <br>

@@ -1,8 +1,8 @@
-package com.codesoom.assignment.user.domain.port.in;
+package com.codesoom.assignment.user.application.port.in;
 
-import com.codesoom.assignment.user.domain.port.command.UserCreateRequest;
-import com.codesoom.assignment.user.domain.port.command.UserUpdateRequest;
-import com.codesoom.assignment.user.repository.User;
+import com.codesoom.assignment.user.application.port.command.UserCreateRequest;
+import com.codesoom.assignment.user.application.port.command.UserUpdateRequest;
+import com.codesoom.assignment.user.domain.User;
 
 public interface UserUseCase {
     /**

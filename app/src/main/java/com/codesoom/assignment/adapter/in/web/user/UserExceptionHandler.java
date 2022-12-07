@@ -1,6 +1,8 @@
-package com.codesoom.assignment.user.exception;
+package com.codesoom.assignment.adapter.in.web.user;
 
 import com.codesoom.assignment.common.exception.dto.ErrorResponse;
+import com.codesoom.assignment.user.application.exception.UserEmailDuplicationException;
+import com.codesoom.assignment.user.application.exception.UserNotFoundException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
@@ -13,7 +15,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
  */
 @RestControllerAdvice
 @Order(Ordered.HIGHEST_PRECEDENCE)
-public class UserExceptionHandler {
+public final class UserExceptionHandler {
 
     /**
      * 회원을 찾지 못했을 때 던지는 예외를 핸들링합니다.
@@ -23,7 +25,7 @@ public class UserExceptionHandler {
      */
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(UserNotFoundException.class)
-    public ErrorResponse handleUserNotFound(final UserNotFoundException exception) {
+    public static ErrorResponse handleUserNotFound(final UserNotFoundException exception) {
         return ErrorResponse.from(exception);
     }
 
@@ -35,7 +37,7 @@ public class UserExceptionHandler {
      */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(UserEmailDuplicationException.class)
-    public ErrorResponse handleUserEmailIsAlreadyExisted(final UserEmailDuplicationException exception) {
+    public static ErrorResponse handleUserEmailIsAlreadyExisted(final UserEmailDuplicationException exception) {
         return ErrorResponse.from(exception);
     }
 }

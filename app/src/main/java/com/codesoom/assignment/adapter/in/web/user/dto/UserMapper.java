@@ -1,6 +1,8 @@
-package com.codesoom.assignment.user.domain.port.command;
+package com.codesoom.assignment.adapter.in.web.user.dto;
 
-import com.codesoom.assignment.user.repository.User;
+import com.codesoom.assignment.user.application.port.command.UserCreateRequest;
+import com.codesoom.assignment.user.application.port.command.UserUpdateRequest;
+import com.codesoom.assignment.user.domain.User;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -20,7 +22,7 @@ public interface UserMapper {
      */
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "deleted", ignore = true)
-    User toEntity(UserCreateRequest userCreateRequest);
+    User toEntity(final UserCreateRequest userCreateRequest);
 
     /**
      * 회원 수정 RequestDto에서 회원 엔티티로 객체를 매핑합니다.
@@ -31,5 +33,5 @@ public interface UserMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "email", ignore = true)
     @Mapping(target = "deleted", ignore = true)
-    User toEntity(UserUpdateRequest userUpdateRequest);
+    User toEntity(final UserUpdateRequest userUpdateRequest);
 }

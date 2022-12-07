@@ -1,19 +1,19 @@
-package com.codesoom.assignment.user.domain;
+package com.codesoom.assignment.user.application;
 
 import com.codesoom.assignment.role.repository.Role;
 import com.codesoom.assignment.role.repository.RoleRepository;
-import com.codesoom.assignment.user.domain.port.command.UserCreateRequest;
-import com.codesoom.assignment.user.domain.port.command.UserUpdateRequest;
-import com.codesoom.assignment.user.domain.port.in.UserUseCase;
-import com.codesoom.assignment.user.exception.UserEmailDuplicationException;
-import com.codesoom.assignment.user.exception.UserNotFoundException;
-import com.codesoom.assignment.user.repository.User;
-import com.codesoom.assignment.user.repository.UserRepository;
+import com.codesoom.assignment.user.application.exception.UserEmailDuplicationException;
+import com.codesoom.assignment.user.application.exception.UserNotFoundException;
+import com.codesoom.assignment.user.application.port.command.UserCreateRequest;
+import com.codesoom.assignment.user.application.port.command.UserUpdateRequest;
+import com.codesoom.assignment.user.application.port.in.UserUseCase;
+import com.codesoom.assignment.user.application.port.out.UserRepository;
+import com.codesoom.assignment.user.domain.User;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 
 @Service
 @Transactional
@@ -39,6 +39,7 @@ public class UserService implements UserUseCase {
 
         User user = userRepository.save(userCreateRequest.toEntity());
 
+        // TODO: 미리 비밀번호 encoding 후 save 진행
         user.changePassword(userCreateRequest.getPassword(), passwordEncoder);
 
         roleRepository.save(new Role(user.getId(), "USER"));
