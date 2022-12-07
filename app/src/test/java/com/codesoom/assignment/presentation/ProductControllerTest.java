@@ -10,7 +10,7 @@ import com.codesoom.assignment.product.application.ProductService;
 import com.codesoom.assignment.product.application.exception.ProductNotFoundException;
 import com.codesoom.assignment.product.application.port.command.ProductUpdateRequest;
 import com.codesoom.assignment.product.domain.Product;
-import com.codesoom.assignment.role.repository.Role;
+import com.codesoom.assignment.role.domain.Role;
 import com.codesoom.assignment.support.AuthHeaderFixture;
 import com.codesoom.assignment.support.ProductFixture;
 import org.junit.jupiter.api.BeforeEach;

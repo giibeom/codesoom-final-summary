@@ -1,6 +1,6 @@
 package com.codesoom.assignment.auth.application.port.in;
 
-import com.codesoom.assignment.role.repository.Role;
+import com.codesoom.assignment.role.domain.Role;
 
 import java.util.List;
 

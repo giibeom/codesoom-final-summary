@@ -1,4 +1,4 @@
-package com.codesoom.assignment.role.repository;
+package com.codesoom.assignment.role.domain;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,12 +19,13 @@ public class Role {
     @Getter
     private String name;
 
-    public Role(Long userId, String name) {
+    // TODO: User 2차 리팩토링 진행하면서 같이 리팩토링
+    public Role(final Long userId, final String name) {
         this.userId = userId;
         this.name = name;
     }
 
-    public Role(String name) {
+    public Role(final String name) {
         this(null, name);
     }
 }

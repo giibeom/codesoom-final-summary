@@ -2,7 +2,7 @@ package com.codesoom.assignment.presentation;
 
 import com.codesoom.assignment.auth.application.exception.InvalidTokenException;
 import com.codesoom.assignment.auth.application.port.in.AuthenticationUseCase;
-import com.codesoom.assignment.role.repository.Role;
+import com.codesoom.assignment.role.domain.Role;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.boot.test.mock.mockito.MockBean;
 

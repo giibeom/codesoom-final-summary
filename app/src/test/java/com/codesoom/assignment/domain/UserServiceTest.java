@@ -1,7 +1,7 @@
 package com.codesoom.assignment.domain;
 
-import com.codesoom.assignment.role.repository.Role;
-import com.codesoom.assignment.role.repository.RoleRepository;
+import com.codesoom.assignment.role.application.port.out.RoleRepository;
+import com.codesoom.assignment.role.domain.Role;
 import com.codesoom.assignment.support.UserFixture;
 import com.codesoom.assignment.user.application.UserService;
 import com.codesoom.assignment.user.application.exception.UserEmailDuplicationException;
