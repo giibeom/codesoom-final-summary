@@ -1,4 +1,4 @@
-package com.codesoom.assignment.session.exception;
+package com.codesoom.assignment.auth.application.exception;
 
 /**
  * 토큰이 유효하지 않을 때 던지는 예외입니다 <br>

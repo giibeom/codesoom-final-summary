@@ -1,5 +1,7 @@
-package com.codesoom.assignment.session.exception;
+package com.codesoom.assignment.adapter.in.web.session;
 
+import com.codesoom.assignment.auth.application.exception.InvalidTokenException;
+import com.codesoom.assignment.auth.application.exception.LoginFailException;
 import com.codesoom.assignment.common.exception.dto.ErrorResponse;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -13,7 +15,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
  */
 @RestControllerAdvice
 @Order(Ordered.HIGHEST_PRECEDENCE)
-public class AuthExceptionHandler {
+public final class AuthExceptionHandler {
 
     /**
      * 로그인이 실패할 때 던지는 예외를 핸들링합니다.
@@ -23,7 +25,7 @@ public class AuthExceptionHandler {
      */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(LoginFailException.class)
-    public ErrorResponse handleLoginFailException(final LoginFailException exception) {
+    public static ErrorResponse handleLoginFailException(final LoginFailException exception) {
         return ErrorResponse.from(exception);
     }
 
@@ -35,21 +37,7 @@ public class AuthExceptionHandler {
      */
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(InvalidTokenException.class)
-    public ErrorResponse handleInvalidAccessTokenException(final InvalidTokenException exception) {
+    public static ErrorResponse handleInvalidAccessTokenException(final InvalidTokenException exception) {
         return ErrorResponse.from(exception);
     }
-
-
-
-    /* TODO: AccessDeniedException을 직접 핸들링하거나, 예외 문구를 바꾸는 법 서칭
-       현재는 Spring Security가 알아서 아래와 같이 응답 코드를 던짐
-       - isAuthenticated() : 401
-       - hasAnyAuthority() : 403
-
-       예외 응답 body message를 handler로 세팅해주려면 AccessDeniedException의 원인이 뭔지 직접 판별해야 됨
-    */
-//    @ExceptionHandler(AccessDeniedException.class)
-//    public ErrorResponse handleAccessDeniedException() {
-//        return new ErrorResponse("Access denied");
-//    }
 }

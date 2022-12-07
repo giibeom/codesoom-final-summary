@@ -1,4 +1,4 @@
-package com.codesoom.assignment.session.application.port.in;
+package com.codesoom.assignment.auth.application.port.in;
 
 import com.codesoom.assignment.role.repository.Role;
 

@@ -1,4 +1,4 @@
-package com.codesoom.assignment.session.exception;
+package com.codesoom.assignment.auth.application.exception;
 
 /**
  * 로그인이 실패할 때 던지는 예외입니다. <br>
