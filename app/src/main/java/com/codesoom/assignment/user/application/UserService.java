@@ -9,7 +9,6 @@ import com.codesoom.assignment.user.application.port.command.UserUpdateRequest;
 import com.codesoom.assignment.user.application.port.in.UserUseCase;
 import com.codesoom.assignment.user.application.port.out.UserRepository;
 import com.codesoom.assignment.user.domain.User;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,13 +50,7 @@ public class UserService implements UserUseCase {
     }
 
     public User updateUser(final Long id,
-                           final UserUpdateRequest userUpdateRequest,
-                           final Long userId) throws AccessDeniedException {
-        // TODO: 인가 로직 AOP로 분리
-        if (!id.equals(userId)) {
-            throw new AccessDeniedException("Access denied");
-        }
-
+                           final UserUpdateRequest userUpdateRequest) {
         User user = findUser(id);
 
         user.update(userUpdateRequest.toEntity(passwordEncoder));

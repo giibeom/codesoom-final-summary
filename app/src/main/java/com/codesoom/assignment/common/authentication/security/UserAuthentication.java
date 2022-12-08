@@ -1,4 +1,4 @@
-package com.codesoom.assignment.common.security;
+package com.codesoom.assignment.common.authentication.security;
 
 import com.codesoom.assignment.role.domain.Role;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
