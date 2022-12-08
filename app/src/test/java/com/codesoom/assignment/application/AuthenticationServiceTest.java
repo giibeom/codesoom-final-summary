@@ -1,4 +1,4 @@
-package com.codesoom.assignment.domain;
+package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.auth.application.AuthenticationService;
 import com.codesoom.assignment.auth.application.exception.InvalidTokenException;
