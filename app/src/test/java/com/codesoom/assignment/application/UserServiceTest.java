@@ -1,4 +1,4 @@
-package com.codesoom.assignment.domain;
+package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.role.application.port.out.RoleRepository;
 import com.codesoom.assignment.role.domain.Role;

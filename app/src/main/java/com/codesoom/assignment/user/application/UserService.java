@@ -31,18 +31,17 @@ public class UserService implements UserUseCase {
     }
 
     public User createUser(final UserCreateRequest userCreateRequest) {
-        String email = userCreateRequest.getEmail();
-
-        if (userRepository.existsByEmail(email)) {
+        if (isAlreadyExistEmail(userCreateRequest)) {
             throw new UserEmailDuplicationException();
         }
 
-        User user = userRepository.save(userCreateRequest.toEntity());
+        User user = userRepository.save(
+                userCreateRequest.toEntity(passwordEncoder)
+        );
 
-        // TODO: 미리 비밀번호 encoding 후 save 진행
-        user.changePassword(userCreateRequest.getPassword(), passwordEncoder);
-
-        roleRepository.save(new Role(user.getId(), "USER"));
+        roleRepository.save(
+                new Role(user.getId(), "USER")
+        );
 
         return user;
     }
@@ -57,7 +56,7 @@ public class UserService implements UserUseCase {
 
         User user = findUser(id);
 
-        user.update(userUpdateRequest.toEntity(), passwordEncoder);
+        user.update(userUpdateRequest.toEntity(passwordEncoder));
 
         return user;
     }
@@ -68,8 +67,13 @@ public class UserService implements UserUseCase {
         return user;
     }
 
+
     private User findUser(final Long id) {
         return userRepository.findByIdAndDeletedIsFalse(id)
                 .orElseThrow(UserNotFoundException::new);
+    }
+
+    private boolean isAlreadyExistEmail(final UserCreateRequest userCreateRequest) {
+        return userRepository.existsByEmail(userCreateRequest.getEmail());
     }
 }
