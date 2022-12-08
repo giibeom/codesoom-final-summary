@@ -14,6 +14,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.codesoom.assignment.role.domain.RoleType.USER;
+
 
 @Service
 @Transactional
@@ -39,8 +41,10 @@ public class UserService implements UserUseCase {
                 userCreateRequest.toEntity(passwordEncoder)
         );
 
-        roleRepository.save(
-                new Role(user.getId(), "USER")
+        roleRepository.save(Role.builder()
+                .userId(user.getId())
+                .roleName(USER.getRoleName())
+                .build()
         );
 
         return user;
